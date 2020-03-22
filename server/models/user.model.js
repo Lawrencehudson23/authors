@@ -7,26 +7,23 @@ const UserSchema  = new mongoose.Schema({
     type: String,
     minLength: [
         3,
-        "First name have to be at least 3 characters"
+        "First name must be at least 3 characters or more"
     ]
   },
   lastName: {
     type: String,
     minLength: [
         3,
-        "Last name have to be at least 3 characters"
+        "Last name must be at least 3 characters or more"
     ]
   },
   email: {
     type: String,
-    minLength: [
-        3,
-        "email have to be at least 3 characters"
-    ],
-    validate: {
-        validator: val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
-        message: "Please enter a valid email"
-      }
+    unique: true,
+    validate: [
+        val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
+        "Please enter a valid email address"
+    ]
   },
   password: {
     type: String,
@@ -35,16 +32,23 @@ const UserSchema  = new mongoose.Schema({
         "Password must be at least 8 characters or longer"
     ]
   }
-},{timestamps:true});
-
-UserSchema.virtual("confirmPassword")
-    .get(()=>this._confirmPassword)
-    .set(value => this._confirmPassword = value);
+},{timestamps: true });
+//only in getter setter
+UserSchema.virtual("confirmPassword",{
+  get:() => this._confirmPassword,
+  set:val => this._confirmPassword = val
+});
 
 UserSchema.pre("validate",function(next) {
-    if(this.password !== this._confirmPassword){
-        this.invalidate("confirmPassword", "Password must match confirm password");
+    console.log(this.password)
+    console.log(this.confirmPassword)
+    if(this.password !== this.confirmPassword){
+      console.log("Password is not matching!");
+
+      this.invalidate("confirmPassword", "Password must match confirm password");
     }
+    
+    console.log("Password is matching!");
     next();
     
 });
@@ -53,10 +57,8 @@ UserSchema.pre("save", function(next) {
     bcrypt.hash(this.password, 10)
         .then(hash => {
             this.password= hash;
-            next();
-            
-        });
-        
+            next()
+          })
 });
 
 
