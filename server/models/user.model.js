@@ -22,7 +22,7 @@ const UserSchema  = new mongoose.Schema({
     unique: true,
     validate: [
         val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
-        "Please enter a valid email address"
+        "Please enter a valid email address!"
     ]
   },
   password: {
@@ -42,10 +42,18 @@ UserSchema.virtual("confirmPassword",{
 UserSchema.pre("validate",function(next) {
     console.log(this.password)
     console.log(this.confirmPassword)
-    if(this.password !== this.confirmPassword){
-      console.log("Password is not matching!");
+    if(this.firstName.length<3){
+      this.invalidate('firstName',"First name must be at least 3 characters or more!")
+    }
+    if(this.lastName.length<3){
+      this.invalidate('lastName',"Last name must be at least 3 characters or more!")
+    }
+    if(this.password.length<8){
+      this.invalidate('password',"Password must be at least 8 characters or more!")
+    }
 
-      this.invalidate("confirmPassword", "Password must match confirm password");
+    if(this.password !== this.confirmPassword){
+      this.invalidate("confirmPassword", "Password must match confirm password!");
     }
     
     console.log("Password is matching!");
