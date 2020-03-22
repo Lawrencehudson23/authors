@@ -42,11 +42,20 @@ UserSchema.virtual("confirmPassword",{
 UserSchema.pre("validate",function(next) {
     console.log(this.password)
     console.log(this.confirmPassword)
-    if(this.firstName.length<3){
+    if(!this.firstName){
+      this.invalidate('firstName',"First name must be provide!")
+    }
+    else if(this.firstName.length<3){
       this.invalidate('firstName',"First name must be at least 3 characters or more!")
     }
-    if(this.lastName.length<3){
+    if(!this.lastName){
+      this.invalidate('lastName',"Last name must be provide!")
+    }
+    else if(this.lastName.length<3){
       this.invalidate('lastName',"Last name must be at least 3 characters or more!")
+    }
+    if(!this.email){
+      this.invalidate('email',"Email must be at provide!")
     }
     if(this.password.length<8){
       this.invalidate('password',"Password must be at least 8 characters or more!")
