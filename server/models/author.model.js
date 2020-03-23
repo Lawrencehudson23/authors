@@ -1,5 +1,17 @@
 const mongoose = require("mongoose");
-const AuthorSchema = mongoose.Schema({
+
+const BookSchema = new mongoose.Schema({
+    title:{
+        type:String,
+        required: [
+            true,
+            'Please enter a title!'
+        ]
+    }
+},{timestamps: true })
+
+
+const AuthorSchema = new mongoose.Schema({
     name:{
         type:String,
         required:true,
@@ -8,10 +20,21 @@ const AuthorSchema = mongoose.Schema({
             "Name have to be at least 3 characters"
         ]
         
-    }
-},{ timestamps:true });
+    },
+    favoriteBooks:[BookSchema],
+    // game1 :{
+    //     type: String,
+    //     default : 'unknown',
+    // },
+    // game2:{
+    //     type: String,
+    //     default : 'unknown'
+    // },
+    // game3:{
+    //     type: String,
+    //     default : 'unknown'
+    // } 
+},{ timestamps: true });
 
-module.exports = mongoose.model("Author",AuthorSchema);
- 
-
-
+const Author = mongoose.model("Author",AuthorSchema);
+module.exports = Author;

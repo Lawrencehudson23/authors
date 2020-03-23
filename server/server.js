@@ -21,6 +21,4 @@ const userRoutes = require('./routes/user.routes');
 authorRoutes(app);
 userRoutes(app);
 
-
-
 app.listen(5000, () => console.log("The server is all fired up on port 5000💯🔥"));

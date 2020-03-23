@@ -9,7 +9,8 @@ module.exports.createAuthor = (req,res) => {
       .catch(err => res.status(400).json(err));
     
 };
-module.exports.showAllAuthors = (req,res) => {
+// '_'  is placeholder
+module.exports.showAllAuthors = (_,res) => {
   Author.find()
     .then(allAuthors=>res.json(allAuthors))
     .catch(err=>res.status(400).json(err));
